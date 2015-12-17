@@ -3,14 +3,15 @@
 #include<stdio.h>
 #include<string.h>
 
+
 extern "C" {
-//#ifdef BIT64
-//#include"./sdl64/include/SDL.h"
-//#include"./sdl64/include/SDL_main.h"
-//#else
+	//#ifdef BIT64
+	//#include"./sdl64/include/SDL.h"
+	//#include"./sdl64/include/SDL_main.h"
+	//#else
 #include"./sdl/include/SDL.h"
 #include"./sdl/include/SDL_main.h"
-//#endif
+	//#endif
 }
 
 #define SCREEN_WIDTH	640
@@ -85,7 +86,9 @@ void DrawRectangle(SDL_Surface *screen, int x, int y, int l, int k,
 		DrawLine(screen, x + 1, i, l - 2, 1, 0, fillColor);
 	};
 
-
+void klocekT(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color);
+void klocekL(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color);
+void klocekL_(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color);
 // main
 #ifdef __cplusplus
 extern "C"
@@ -130,7 +133,7 @@ int main(int argc, char **argv) {
 	                           SDL_TEXTUREACCESS_STREAMING,
 	                           SCREEN_WIDTH, SCREEN_HEIGHT);
 
-
+	
 	// wy³¹czenie widocznoœci kursora myszy
 	SDL_ShowCursor(SDL_DISABLE);
 
@@ -166,7 +169,7 @@ int main(int argc, char **argv) {
 	int niebieski = SDL_MapRGB(screen->format, 0x11, 0x11, 0xCC);
 
 	t1 = SDL_GetTicks();
-
+	
 	frames = 0;
 	fpsTimer = 0;
 	fps = 0;
@@ -183,7 +186,7 @@ int main(int argc, char **argv) {
 		// delta to ten sam czas w sekundach
 		delta = (t2 - t1) * 0.001;
 		t1 = t2;
-
+		
 		worldTime += delta;
 
 		distance += etiSpeed * delta;
@@ -213,12 +216,14 @@ int main(int argc, char **argv) {
 		DrawString(screen, screen->w / 2 - strlen(text) * 8 / 2, 10, text, charset);
 		sprintf(text, "Esc - wyjscie, \030 - przyspieszenie, \031 - zwolnienie");
 		DrawString(screen, screen->w / 2 - strlen(text) * 8 / 2, 26, text, charset);
-
+		klocekT(screen, 50, 50, 20, 20, czerwony);
+		klocekL(screen, 100, 100, 20, 20, czerwony);
+		klocekL_(screen, 120, 120, 20, 20, czerwony);
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
 //		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, scrtex, NULL, NULL);
 		SDL_RenderPresent(renderer);
-
+		
 		// obs³uga zdarzeñ (o ile jakieœ zasz³y)
 		while(SDL_PollEvent(&event)) {
 			switch(event.type) {
@@ -248,3 +253,32 @@ int main(int argc, char **argv) {
 	SDL_Quit();
 	return 0;
 	};
+
+	void klocekT(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc,int color)
+	{
+		DrawRectangle(screen, x + szerokosc, y, szerokosc, wysokosc, color,color);
+		DrawRectangle(screen, x, y+wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + 2*szerokosc, y + wysokosc, szerokosc, wysokosc, color, color);
+	}
+	void klocekL(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color)
+	{
+		DrawRectangle(screen, x, y, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x, y + wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x, y + 2*wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + 2 * wysokosc, szerokosc, wysokosc, color, color);
+	}
+	void klocekL_(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color)
+	{
+		DrawRectangle(screen, x + szerokosc, y, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + 2 * wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x , y + 2 * wysokosc, szerokosc, wysokosc, color, color);
+	}
+	void klocekL_(SDL_Surface *screen, int x, int y, int szerokosc, int wysokosc, int color)
+	{
+		DrawRectangle(screen, x + szerokosc, y, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x + szerokosc, y + 2 * wysokosc, szerokosc, wysokosc, color, color);
+		DrawRectangle(screen, x, y + 2 * wysokosc, szerokosc, wysokosc, color, color);
+	}
