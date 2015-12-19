@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	int x, y;
 	bool quit = false;
 	SDL_Event event;
-	SDL_Surface *screen, *charset;
+	SDL_Surface *screen, *szary,*rozowy,*niebieski,*pomaranczowy,*blekit, *zolty;
 	SDL_Texture *scrtex;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -48,11 +48,73 @@ int main(int argc, char **argv)
 	screen = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
 
 	scrtex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,SDL_TEXTUREACCESS_STREAMING,SCREEN_WIDTH, SCREEN_HEIGHT);
+	szary = SDL_LoadBMP("./klocek1.bmp");
+	if (szary == NULL) {
+		printf("SDL_LoadBMP(klocek1.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	rozowy = SDL_LoadBMP("./klocek5.bmp");
+	if (rozowy == NULL) {
+		printf("SDL_LoadBMP(klocek5.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	niebieski = SDL_LoadBMP("./klocek4.bmp");
+	if (niebieski == NULL) {
+		printf("SDL_LoadBMP(klocek4.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	pomaranczowy = SDL_LoadBMP("./klocek8.bmp");
+	if (pomaranczowy == NULL) {
+		printf("SDL_LoadBMP(klocek8.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	blekit = SDL_LoadBMP("./klocek3.bmp");
+	if (pomaranczowy == NULL) {
+		printf("SDL_LoadBMP(klocek3.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	zolty = SDL_LoadBMP("./klocek2.bmp");
+	if (pomaranczowy == NULL) {
+		printf("SDL_LoadBMP(klocek2.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+
+
 
 	int czarny = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
-	int zielony = SDL_MapRGB(screen->format, 0x00, 0xFF, 0x00);
-	int czerwony = SDL_MapRGB(screen->format, 0xFF, 0x00, 0x00);
-	int niebieski = SDL_MapRGB(screen->format, 0x11, 0x11, 0xCC);
+//	int zielony = SDL_MapRGB(screen->format, 0x00, 0xFF, 0x00);
+//	int czerwony = SDL_MapRGB(screen->format, 0xFF, 0x00, 0x00);
+//	int niebieski = SDL_MapRGB(screen->format, 0x11, 0x11, 0xCC);
 	x = 0;
 	y = 0;
 	double delta = 0;
@@ -61,7 +123,7 @@ int main(int argc, char **argv)
 	t1 = t2 = 0;
 	t1 = SDL_GetTicks();
 	int pozycja[4][2] = { 0 };
-	int pozycja_x = 4;
+	int pozycja_x = 5;
 	int pozycja_y = 2;
 	int obrot = 0;
 	int klocek = 0;
@@ -89,22 +151,31 @@ int main(int argc, char **argv)
 				sprawdz(tablica);
 				obrot = 0;
 				klocek++;
-				klocek %= 3;
+				klocek %= 5;
 				pozycja[0][0] = 0;
 				pozycja_y = 2;
-				pozycja_x = 4;
+				pozycja_x = 5;
 			}
 		}
 		switch (klocek)
 		{
 		case 0:
-			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
+			break;
+		case 5:
+			klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
+			break;
+		case 4:
+			klocekI(tablica,pozycja, pozycja_x, pozycja_y,'b',&obrot);
+			break;
+		case 3:
+			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
 			break;
 		case 1:
-			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
 			break;
 		case 2:
-			klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
 			break;
 		}
 		
@@ -114,8 +185,18 @@ int main(int argc, char **argv)
 		{
 			for (int j = 0; j < PLANSZA_Y; j++)
 			{
-				if(tablica[i][j] == 's')
-					DrawRectangle(screen, x + i*WYMIAR, y+j*WYMIAR, WYMIAR, WYMIAR, zielony, zielony);
+				if (tablica[i][j] == 's')
+					DrawSurface(screen, szary, 20+i*WYMIAR, 20+j*WYMIAR);
+				else if(tablica[i][j]=='r')
+					DrawSurface(screen, rozowy, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if(tablica[i][j]=='n')
+					DrawSurface(screen, niebieski, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'p')
+					DrawSurface(screen, pomaranczowy, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'b')
+					DrawSurface(screen, blekit, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'z')
+					DrawSurface(screen, zolty, 20 + i*WYMIAR, 20 + j*WYMIAR);
 			}
 		}
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);

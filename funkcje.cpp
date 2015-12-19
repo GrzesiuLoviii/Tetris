@@ -57,13 +57,11 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 {
 	if(pozycja[0][0]!=0)
 		czyszczenie(tablica, pozycja);
-
 	switch (*obrot)
 	{
 	case 0:
-		if (tablica[x + 1][y] != ' ' && tablica[x - 2][y] == ' ')
+		if(tablica[x-1][y] == ' ' && tablica[x+1][y] == ' ')
 		{
-			x--;
 			//1
 			tablica[x][y] = znak;
 			pozycja[0][0] = x;
@@ -81,32 +79,15 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 			pozycja[3][0] = x + 1;
 			pozycja[3][1] = y;
 		}
-		//else if (tablica[x + 1][y] != ' ' && tablica[x - 2][y] != ' ')
-			//klocekT(tablica, pozycja, x, y, znak, 3);
 		else
 		{
-			//1
-			tablica[x][y] = znak;
-			pozycja[0][0] = x;
-			pozycja[0][1] = y;
-			//2
-			tablica[x][y - 1] = znak;
-			pozycja[1][0] = x;
-			pozycja[1][1] = y - 1;
-			//3
-			tablica[x - 1][y] = znak;
-			pozycja[2][0] = x - 1;
-			pozycja[2][1] = y;
-			//4
-			tablica[x + 1][y] = znak;
-			pozycja[3][0] = x + 1;
-			pozycja[3][1] = y;
+			*obrot = 3;
+			klocekT(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
 	case 1:
-		if (tablica[x][y + 1] != ' ' && tablica[x][y - 2] == ' ')
+		if (tablica[x][y + 1] == ' ')
 		{
-			y--;
 			//1
 			tablica[x][y] = znak;
 			pozycja[0][0] = x;
@@ -124,32 +105,15 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 			pozycja[3][0] = x + 1;
 			pozycja[3][1] = y;
 		}
-		//else if (tablica[x][y+1] != ' ' && tablica[x][y-2] != ' ')
-			//klocekT(tablica, pozycja, x, y, znak, 0);
 		else
 		{
-			//1
-			tablica[x][y] = znak;
-			pozycja[0][0] = x;
-			pozycja[0][1] = y;
-			//2
-			tablica[x][y - 1] = znak;
-			pozycja[1][0] = x;
-			pozycja[1][1] = y - 1;
-			//3
-			tablica[x][y + 1] = znak;
-			pozycja[2][0] = x;
-			pozycja[2][1] = y + 1;
-			//4
-			tablica[x + 1][y] = znak;
-			pozycja[3][0] = x + 1;
-			pozycja[3][1] = y;
+			*obrot=0;
+			klocekT(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
 	case 2:
-		if (tablica[x-1][y] != ' ' && tablica[x+2][y] == ' ')
+		if (tablica[x-1][y] == ' ')
 		{
-			x++;
 			//1
 			tablica[x][y] = znak;
 			pozycja[0][0] = x;
@@ -167,32 +131,15 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 			pozycja[3][0] = x + 1;
 			pozycja[3][1] = y;
 		}
-		//else if (tablica[x-1][y] != ' ' && tablica[x+2][y] != ' ')
-		//	klocekT(tablica, pozycja, x, y, znak, 1);
 		else
 		{
-			//1
-			tablica[x][y] = znak;
-			pozycja[0][0] = x;
-			pozycja[0][1] = y;
-			//2
-			tablica[x - 1][y] = znak;
-			pozycja[1][0] = x - 1;
-			pozycja[1][1] = y;
-			//3
-			tablica[x][y + 1] = znak;
-			pozycja[2][0] = x;
-			pozycja[2][1] = y + 1;
-			//4
-			tablica[x + 1][y] = znak;
-			pozycja[3][0] = x + 1;
-			pozycja[3][1] = y;
+			*obrot = 1;
+			klocekT(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
 	case 3:
-		if (tablica[x][y-1] != ' ' && tablica[x][y+2] == ' ')
+		if (tablica[x][y-1] == ' ')
 		{
-			y++;
 			//1
 			tablica[x][y] = znak;
 			pozycja[0][0] = x;
@@ -210,26 +157,10 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 			pozycja[3][0] = x;
 			pozycja[3][1] = y - 1;
 		}
-		//else if (tablica[x][y-1] != ' ' && tablica[x][y+2] != ' ')
-		//	klocekT(tablica, pozycja, x, y, znak, 2);
 		else
 		{
-			//1
-			tablica[x][y] = znak;
-			pozycja[0][0] = x;
-			pozycja[0][1] = y;
-			//2
-			tablica[x - 1][y] = znak;
-			pozycja[1][0] = x - 1;
-			pozycja[1][1] = y;
-			//3
-			tablica[x][y + 1] = znak;
-			pozycja[2][0] = x;
-			pozycja[2][1] = y + 1;
-			//4
-			tablica[x][y - 1] = znak;
-			pozycja[3][0] = x;
-			pozycja[3][1] = y - 1;
+			*obrot = 2;
+			klocekT(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
 	}
@@ -294,40 +225,56 @@ void klocekL(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 		}
 		break;
 	case 2:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x+1][y] = znak;
-		pozycja[1][0] = x+1;
-		pozycja[1][1] = y;
-		//3
-		tablica[x-1][y] = znak;
-		pozycja[2][0] = x-1;
-		pozycja[2][1] = y;
-		//4
-		tablica[x - 1][y + 1] = znak;
-		pozycja[3][0] = x - 1;
-		pozycja[3][1] = y + 1;
+		if (tablica[x+1][y] == ' ' && tablica[x-1][y + 1] == ' ' && tablica[x-1][y] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x - 1][y + 1] = znak;
+			pozycja[3][0] = x - 1;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 1;
+			klocekL(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
 	case 3:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x][y + 1] = znak;
-		pozycja[1][0] = x;
-		pozycja[1][1] = y + 1;
-		//3
-		tablica[x][y-1] = znak;
-		pozycja[2][0] = x;
-		pozycja[2][1] = y-1;
-		//4
-		tablica[x - 1][y - 1] = znak;
-		pozycja[3][0] = x - 1;
-		pozycja[3][1] = y - 1;
+		if (tablica[x - 1][y-1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x][y - 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y + 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y + 1;
+			//3
+			tablica[x][y-1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y-1;
+			//4
+			tablica[x - 1][y - 1] = znak;
+			pozycja[3][0] = x - 1;
+			pozycja[3][1] = y - 1;
+		}
+		else
+		{
+			*obrot = 2;
+			klocekL(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
 	}
 }
@@ -339,7 +286,7 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 	switch (*obrot)
 	{
 	case 0:
-		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 1][y - 1] == ' ')
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x - 1][y - 1] == ' ')
 		{
 			//1
 			tablica[x][y] = znak;
@@ -358,9 +305,14 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 			pozycja[3][0] = x - 1;
 			pozycja[3][1] = y - 1;
 		}
+		else
+		{
+			*obrot = 3;
+			klocekJ(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
 	case 1:
-		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y - 1] == ' ')
 		{
 			//1
 			tablica[x][y] = znak;
@@ -379,54 +331,14 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 			pozycja[3][0] = x + 1;
 			pozycja[3][1] = y - 1;
 		}
+		else
+		{
+			*obrot = 0;
+			klocekJ(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
 	case 2:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x + 1][y] = znak;
-		pozycja[1][0] = x + 1;
-		pozycja[1][1] = y;
-		//3
-		tablica[x - 1][y] = znak;
-		pozycja[2][0] = x - 1;
-		pozycja[2][1] = y;
-		//4
-		tablica[x + 1][y + 1] = znak;
-		pozycja[3][0] = x + 1;
-		pozycja[3][1] = y + 1;
-		break;
-	case 3:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x][y - 1] = znak;
-		pozycja[1][0] = x;
-		pozycja[1][1] = y - 1;
-		//3
-		tablica[x][y + 1] = znak;
-		pozycja[2][0] = x;
-		pozycja[2][1] = y + 1;
-		//4
-		tablica[x - 1][y + 1] = znak;
-		pozycja[3][0] = x - 1;
-		pozycja[3][1] = y + 1;
-		break;
-	}
-}
-void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
-{
-	if (pozycja[0][0] != 0)
-		czyszczenie(tablica, pozycja);
-
-	switch (*obrot)
-	{
-	case 0:
-		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 1][y - 1] == ' ')
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y + 1] == ' ' && tablica[x + 1][y] == ' ')
 		{
 			//1
 			tablica[x][y] = znak;
@@ -441,13 +353,81 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 			pozycja[2][0] = x - 1;
 			pozycja[2][1] = y;
 			//4
-			tablica[x - 1][y - 1] = znak;
+			tablica[x + 1][y + 1] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 1;
+			klocekJ(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	case 3:
+		if (tablica[x][y - 1] == ' ' && tablica[x - 1][y + 1] == ' ' && tablica[x][y+1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x - 1][y + 1] = znak;
 			pozycja[3][0] = x - 1;
-			pozycja[3][1] = y - 1;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 2;
+			klocekJ(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	}
+}
+void klocekI(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
+	case 2:
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 2][y] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x + 2][y] = znak;
+			pozycja[3][0] = x + 2;
+			pozycja[3][1] = y;
+		}
+		else
+		{
+			*obrot = 3;
+			klocekI(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
 	case 1:
-		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+	case 3:
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x][y + 2] == ' ')
 		{
 			//1
 			tablica[x][y] = znak;
@@ -462,46 +442,100 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 			pozycja[2][0] = x;
 			pozycja[2][1] = y - 1;
 			//4
-			tablica[x + 1][y - 1] = znak;
-			pozycja[3][0] = x + 1;
-			pozycja[3][1] = y - 1;
+			tablica[x][y +2] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y + 2;
+		}
+		else
+		{
+			*obrot = 0;
+			klocekI(tablica, pozycja, x, y, znak, obrot);
 		}
 		break;
+	}
+}
+void klocekO(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x + 1][y+1] = znak;
+			pozycja[2][0] = x + 1;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x][y+1] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y+1;
+}
+void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
 	case 2:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x + 1][y] = znak;
-		pozycja[1][0] = x + 1;
-		pozycja[1][1] = y;
-		//3
-		tablica[x - 1][y] = znak;
-		pozycja[2][0] = x - 1;
-		pozycja[2][1] = y;
-		//4
-		tablica[x + 1][y + 1] = znak;
-		pozycja[3][0] = x + 1;
-		pozycja[3][1] = y + 1;
+		if (tablica[x - 1][y+1] == ' ' && tablica[x + 1][y] == ' ' && tablica[x][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x - 1][y + 1] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x][y + 1] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 3;
+			klocekS(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
+	case 1:
 	case 3:
-		//1
-		tablica[x][y] = znak;
-		pozycja[0][0] = x;
-		pozycja[0][1] = y;
-		//2
-		tablica[x][y-1] = znak;
-		pozycja[1][0] = x;
-		pozycja[1][1] = y-1;
-		//3
-		tablica[x][y+1] = znak;
-		pozycja[2][0] = x;
-		pozycja[2][1] = y+1;
-		//4
-		tablica[x - 1][y + 1] = znak;
-		pozycja[3][0] = x - 1;
-		pozycja[3][1] = y + 1;
+		if (tablica[x][y - 1] == ' ' && tablica[x+1][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x+1][y + 1] = znak;
+			pozycja[1][0] = x+1;
+			pozycja[1][1] = y + 1;
+			//3
+			tablica[x][y - 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y - 1;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		else
+		{
+			*obrot = 0;
+			klocekS(tablica, pozycja, x, y, znak, obrot);
+		}
 		break;
 	}
 }
