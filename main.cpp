@@ -303,13 +303,28 @@ int main(int argc, char **argv)
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE) quit = true;
-				else if (event.key.keysym.sym == SDLK_LEFT) x--;
-				else if (event.key.keysym.sym == SDLK_RIGHT) x++;
-				else if (event.key.keysym.sym == SDLK_UP)
+				switch (event.key.keysym.sym)
 				{
+				case SDLK_ESCAPE: quit = true; break;
+				case SDLK_LEFT: x--; break;
+				case SDLK_RIGHT: x++; break;
+				case SDLK_UP:
+				case SDLK_SPACE:
 					obrot++;
 					obrot %= 4;
+					break;
+				case SDLK_p:
+					bool pause = true;
+					while (pause)
+					{
+						while (SDL_PollEvent(&event)) {
+							switch (event.type) {
+							case SDL_KEYDOWN:
+								if (event.key.keysym.sym == SDLK_p)
+									pause = false;
+							}
+						}
+					}
 				}
 				break;
 			case SDL_QUIT:
