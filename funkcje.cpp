@@ -632,8 +632,9 @@ void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2],int *poz
 		*pozycja_x += x;
 	}
 }
-void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y])
+void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int etap, int *poprzednie)
 {
+	int zbicie = 0;
 	int zapelnienie = 0;
 	for (int i = 1; i < PLANSZA_Y-1; i++)
 	{
@@ -643,15 +644,35 @@ void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y])
 		{
 			for (int j = 1; j < PLANSZA_X - 1; j++)
 				tablica[j][i] = ' ';
+			
 			for (int k = i; k > 1; k--)
 			{
 				for (int j = 1; j < PLANSZA_X - 1; j++)
 					tablica[j][k] = tablica[j][k - 1];
 			}
-				
+			zbicie++;
 		}
 		zapelnienie = 0;
-
 	}
-
+	switch (zbicie)
+	{
+	case 4:
+		if (*poprzednie == 4)
+			(*punkty) += 1200*(etap + 1);
+		else
+		{
+			(*punkty) += 800 * (etap + 1);
+		}
+		break;
+	case 3:
+		(*punkty) += 400 * (etap + 1);
+		break;
+	case 2:
+		(*punkty) += 200 * (etap + 1);
+		break;
+	case 1:
+		(*punkty) += 100 * (etap + 1);
+		break;
+	}
+	*poprzednie = zbicie;
 }

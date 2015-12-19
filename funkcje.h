@@ -24,6 +24,9 @@ extern "C" {
 #define WYMIAR 15
 #define PLANSZA_X 12
 #define PLANSZA_Y 22
+#define PRZYSPIESZENIE 0.01
+#define ILOSC_ETAPOW 10
+#define CZAS_ETAPU 25
 
 
 // narysowanie napisu txt na powierzchni screen, zaczynaj¹c od punktu (x, y)
@@ -49,5 +52,5 @@ void klocekZ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak=' ');
 bool kolizja(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x = 0, int y = 0);
 void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int *pozycja_x, int x);
-void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y]);
+void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int etap, int *poprzednie);
 #endif

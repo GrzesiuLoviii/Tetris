@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 	bool quit = false;
 	SDL_Event event;
 	SDL_Surface *screen, *szary, *rozowy, *niebieski, *pomaranczowy, *blekit, *zolty, *zielony, *czerwony,
-		*figury[7];
+		*figury[7],*charset;
 	SDL_Texture *scrtex;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -50,6 +50,19 @@ int main(int argc, char **argv)
 	screen = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
 
 	scrtex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,SDL_TEXTUREACCESS_STREAMING,SCREEN_WIDTH, SCREEN_HEIGHT);
+	charset = SDL_LoadBMP("./cs8x8.bmp");
+	if (charset == NULL) {
+		printf("SDL_LoadBMP(cs8x8.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+
+
+
 	szary = SDL_LoadBMP("./klocek1.bmp");
 	if (szary == NULL) {
 		printf("SDL_LoadBMP(klocek1.bmp) error: %s\n", SDL_GetError());
@@ -218,6 +231,10 @@ int main(int argc, char **argv)
 	int obrot = 0;
 	int klocek = rand()%7;
 	int next_klocek = rand() % 7;
+	int etap = 0;
+	double odliczanie = CZAS_ETAPU;
+	int punkty = 0;
+	int poprzednie=0;
 	while (!quit) {
 		t2 = SDL_GetTicks();
 		SDL_FillRect(screen, NULL, czarny);
@@ -229,17 +246,23 @@ int main(int argc, char **argv)
 			przesuniecie(tablica, pozycja, &pozycja_x, x);
 			x = 0;
 		}
+		odliczanie -= delta;
+		if (etap < ILOSC_ETAPOW && odliczanie <= 0)
+		{
+			etap++;
+			odliczanie = CZAS_ETAPU;
+		}
 		if (czas <= 0)
 		{
 			if (!kolizja(tablica, pozycja, 0, 1))
 			{
 				czyszczenie(tablica, pozycja);
-				czas = CZAS_OPADANIA;
+				czas = CZAS_OPADANIA - etap*PRZYSPIESZENIE;
 				pozycja_y += 1;
 			}
 			else
 			{
-				sprawdz(tablica);
+				sprawdz(tablica, &punkty, etap, &poprzednie);
 				obrot = 0;
 				klocek = next_klocek;
 				next_klocek = rand() % 7;
@@ -272,7 +295,14 @@ int main(int argc, char **argv)
 			klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
 			break;
 		}
+		// nastepny klocek
 		DrawSurface(screen, figury[next_klocek], 80 + PLANSZA_X*WYMIAR, 20 + 4*WYMIAR);
+		// punkty
+		char punkty_txt[25];
+		sprintf(punkty_txt, "Etap: %d", etap+1);
+		DrawString(screen, 70 + PLANSZA_X*WYMIAR, 20 + 8 * WYMIAR, punkty_txt,charset);
+		sprintf(punkty_txt, "Punkty: %d", punkty);
+		DrawString(screen, 70 + PLANSZA_X*WYMIAR, 30 + 8 * WYMIAR, punkty_txt, charset);
 		x = 0; y = 0;
 		for (int i = 0; i < PLANSZA_X; i++)
 		{
