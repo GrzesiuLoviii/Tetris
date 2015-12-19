@@ -5,6 +5,8 @@
 #include<math.h>
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
+#include<ctime>
 
 extern "C" {
 	//#ifdef BIT64
@@ -18,7 +20,7 @@ extern "C" {
 
 #define SCREEN_WIDTH	400
 #define SCREEN_HEIGHT	600
-#define CZAS_OPADANIA 0.4
+#define CZAS_OPADANIA 0.2
 #define WYMIAR 15
 #define PLANSZA_X 12
 #define PLANSZA_Y 22
@@ -43,6 +45,7 @@ void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 void klocekI(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekO(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
+void klocekZ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak=' ');
 bool kolizja(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x = 0, int y = 0);
 void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int *pozycja_x, int x);

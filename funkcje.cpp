@@ -512,7 +512,7 @@ void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 		break;
 	case 1:
 	case 3:
-		if (tablica[x][y - 1] == ' ' && tablica[x+1][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		if (tablica[x][y - 1] == ' ' && tablica[x+1][y] == ' ' && tablica[x + 1][y + 1] == ' ')
 		{
 			//1
 			tablica[x][y] = znak;
@@ -520,7 +520,7 @@ void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 			pozycja[0][1] = y;
 			//2
 			tablica[x+1][y + 1] = znak;
-			pozycja[1][0] = x+1;
+			pozycja[1][0] = x + 1;
 			pozycja[1][1] = y + 1;
 			//3
 			tablica[x][y - 1] = znak;
@@ -539,6 +539,70 @@ void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 		break;
 	}
 }
+void klocekZ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
+	case 2:
+		if (tablica[x + 1][y + 1] == ' ' && tablica[x - 1][y] == ' ' && tablica[x][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x + 1][y + 1] = znak;
+			pozycja[2][0] = x + 1;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x][y + 1] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 3;
+			klocekZ(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	case 1:
+	case 3:
+		if (tablica[x][y - 1] == ' ' && tablica[x - 1][y + 1] == ' ' && tablica[x - 1][y] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y + 1] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y + 1;
+			//3
+			tablica[x][y - 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y - 1;
+			//4
+			tablica[x - 1][y] = znak;
+			pozycja[3][0] = x - 1;
+			pozycja[3][1] = y;
+		}
+		else
+		{
+			*obrot = 0;
+			klocekZ(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	}
+}
+
 void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak)
 {
 	for (int i = 0; i < 4; i++)

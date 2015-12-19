@@ -2,6 +2,7 @@
 
 int main(int argc, char **argv) 
 {
+	srand(time(NULL));
 	char tablica[PLANSZA_X][PLANSZA_Y];
 	for (int i = 0; i < PLANSZA_X; i++)
 	{
@@ -20,7 +21,8 @@ int main(int argc, char **argv)
 	int x, y;
 	bool quit = false;
 	SDL_Event event;
-	SDL_Surface *screen, *szary,*rozowy,*niebieski,*pomaranczowy,*blekit, *zolty;
+	SDL_Surface *screen, *szary, *rozowy, *niebieski, *pomaranczowy, *blekit, *zolty, *zielony, *czerwony,
+		*figury[7];
 	SDL_Texture *scrtex;
 	SDL_Window *window;
 	SDL_Renderer *renderer;
@@ -89,7 +91,7 @@ int main(int argc, char **argv)
 		return 1;
 	};
 	blekit = SDL_LoadBMP("./klocek3.bmp");
-	if (pomaranczowy == NULL) {
+	if (blekit == NULL) {
 		printf("SDL_LoadBMP(klocek3.bmp) error: %s\n", SDL_GetError());
 		SDL_FreeSurface(screen);
 		SDL_DestroyTexture(scrtex);
@@ -99,7 +101,7 @@ int main(int argc, char **argv)
 		return 1;
 	};
 	zolty = SDL_LoadBMP("./klocek2.bmp");
-	if (pomaranczowy == NULL) {
+	if (zolty == NULL) {
 		printf("SDL_LoadBMP(klocek2.bmp) error: %s\n", SDL_GetError());
 		SDL_FreeSurface(screen);
 		SDL_DestroyTexture(scrtex);
@@ -108,8 +110,96 @@ int main(int argc, char **argv)
 		SDL_Quit();
 		return 1;
 	};
-
-
+	czerwony = SDL_LoadBMP("./klocek6.bmp");
+	if (czerwony == NULL) {
+		printf("SDL_LoadBMP(klocek6.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	zielony = SDL_LoadBMP("./klocek7.bmp");
+	if (pomaranczowy == NULL) {
+		printf("SDL_LoadBMP(klocek7.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[6] = SDL_LoadBMP("./kwadrat.bmp");
+	if (figury[6] == NULL) {
+		printf("SDL_LoadBMP(kwadrat.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[0] = SDL_LoadBMP("./linia.bmp");
+	if (figury[0] == NULL) {
+		printf("SDL_LoadBMP(linia.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[1] = SDL_LoadBMP("./literaZ.bmp");
+	if (figury[1] == NULL) {
+		printf("SDL_LoadBMP(literaZ.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[2] = SDL_LoadBMP("./literaS.bmp");
+	if (figury[2] == NULL) {
+		printf("SDL_LoadBMP(literaS.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[3] = SDL_LoadBMP("./literaL.bmp");
+	if (figury[3] == NULL) {
+		printf("SDL_LoadBMP(literaL.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[4] = SDL_LoadBMP("./literaJ.bmp");
+	if (figury[4] == NULL) {
+		printf("SDL_LoadBMP(literaJ.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
+	figury[5] = SDL_LoadBMP("./literaT.bmp");
+	if (figury[5] == NULL) {
+		printf("SDL_LoadBMP(literaT.bmp) error: %s\n", SDL_GetError());
+		SDL_FreeSurface(screen);
+		SDL_DestroyTexture(scrtex);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
+		SDL_Quit();
+		return 1;
+	};
 
 	int czarny = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
 //	int zielony = SDL_MapRGB(screen->format, 0x00, 0xFF, 0x00);
@@ -126,7 +216,8 @@ int main(int argc, char **argv)
 	int pozycja_x = 5;
 	int pozycja_y = 2;
 	int obrot = 0;
-	int klocek = 0;
+	int klocek = rand()%7;
+	int next_klocek = rand() % 7;
 	while (!quit) {
 		t2 = SDL_GetTicks();
 		SDL_FillRect(screen, NULL, czarny);
@@ -150,8 +241,8 @@ int main(int argc, char **argv)
 			{
 				sprawdz(tablica);
 				obrot = 0;
-				klocek++;
-				klocek %= 5;
+				klocek = next_klocek;
+				next_klocek = rand() % 7;
 				pozycja[0][0] = 0;
 				pozycja_y = 2;
 				pozycja_x = 5;
@@ -160,26 +251,28 @@ int main(int argc, char **argv)
 		switch (klocek)
 		{
 		case 0:
-			klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-			break;
-		case 5:
-			klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-			break;
-		case 4:
-			klocekI(tablica,pozycja, pozycja_x, pozycja_y,'b',&obrot);
-			break;
-		case 3:
-			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
+			klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
 			break;
 		case 1:
-			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
+			klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
 			break;
 		case 2:
+			klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
+			break;
+		case 3:
+			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
+			break;
+		case 4:
 			klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
 			break;
+		case 5:
+			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
+			break;
+		case 6:
+			klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
+			break;
 		}
-		
-		
+		DrawSurface(screen, figury[next_klocek], 80 + PLANSZA_X*WYMIAR, 20 + 4*WYMIAR);
 		x = 0; y = 0;
 		for (int i = 0; i < PLANSZA_X; i++)
 		{
@@ -197,6 +290,10 @@ int main(int argc, char **argv)
 					DrawSurface(screen, blekit, 20 + i*WYMIAR, 20 + j*WYMIAR);
 				else if (tablica[i][j] == 'z')
 					DrawSurface(screen, zolty, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'c')
+					DrawSurface(screen, czerwony, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'g')
+					DrawSurface(screen, zielony, 20 + i*WYMIAR, 20 + j*WYMIAR);
 			}
 		}
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
