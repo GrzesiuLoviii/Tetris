@@ -2,14 +2,14 @@
 
 int main(int argc, char **argv) 
 {
-	char tablica[10][20];
-	for (int i = 0; i < 10; i++)
+	char tablica[PLANSZA_X][PLANSZA_Y];
+	for (int i = 0; i < PLANSZA_X; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < PLANSZA_Y; j++)
 		{
-			if (i == 0 || i==9)
+			if (i == 0 || i==PLANSZA_X-1)
 				tablica[i][j] = 's';
-			else if (j == 0 || j == 19)
+			else if (j == 0 || j == PLANSZA_Y-1)
 				tablica[i][j] = 's';
 			else
 				tablica[i][j] = ' ';
@@ -60,15 +60,22 @@ int main(int argc, char **argv)
 	double czas = CZAS_OPADANIA;
 	t1 = t2 = 0;
 	t1 = SDL_GetTicks();
-	int pozycja[4][2];
+	int pozycja[4][2] = { 0 };
 	int pozycja_x = 4;
 	int pozycja_y = 2;
+	int obrot = 0;
+	int klocek = 0;
 	while (!quit) {
 		t2 = SDL_GetTicks();
 		SDL_FillRect(screen, NULL, czarny);
 		delta = (t2 - t1) * 0.001;
 		t1 = t2;
 		czas -= delta;
+		if (x != 0)
+		{
+			przesuniecie(tablica, pozycja, &pozycja_x, x);
+			x = 0;
+		}
 		if (czas <= 0)
 		{
 			if (!kolizja(tablica, pozycja, 0, 1))
@@ -79,15 +86,33 @@ int main(int argc, char **argv)
 			}
 			else
 			{
+				sprawdz(tablica);
+				obrot = 0;
+				klocek++;
+				klocek %= 3;
+				pozycja[0][0] = 0;
 				pozycja_y = 2;
+				pozycja_x = 4;
 			}
 		}
-		klocekT(tablica, pozycja,pozycja_x,pozycja_y, 's');
+		switch (klocek)
+		{
+		case 0:
+			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			break;
+		case 1:
+			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			break;
+		case 2:
+			klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 's', &obrot);
+			break;
+		}
+		
 		
 		x = 0; y = 0;
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < PLANSZA_X; i++)
 		{
-			for (int j = 0; j < 20; j++)
+			for (int j = 0; j < PLANSZA_Y; j++)
 			{
 				if(tablica[i][j] == 's')
 					DrawRectangle(screen, x + i*WYMIAR, y+j*WYMIAR, WYMIAR, WYMIAR, zielony, zielony);
@@ -101,8 +126,13 @@ int main(int argc, char **argv)
 			switch (event.type) {
 			case SDL_KEYDOWN:
 				if (event.key.keysym.sym == SDLK_ESCAPE) quit = true;
-				else if (event.key.keysym.sym == SDLK_LEFT) x -= WYMIAR;
-				else if (event.key.keysym.sym == SDLK_RIGHT) x += WYMIAR;
+				else if (event.key.keysym.sym == SDLK_LEFT) x--;
+				else if (event.key.keysym.sym == SDLK_RIGHT) x++;
+				else if (event.key.keysym.sym == SDLK_UP)
+				{
+					obrot++;
+					obrot %= 4;
+				}
 				break;
 			case SDL_QUIT:
 				quit = 1;

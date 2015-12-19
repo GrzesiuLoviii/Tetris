@@ -18,8 +18,11 @@ extern "C" {
 
 #define SCREEN_WIDTH	400
 #define SCREEN_HEIGHT	600
-#define CZAS_OPADANIA 1
+#define CZAS_OPADANIA 0.4
 #define WYMIAR 20
+#define PLANSZA_X 12
+#define PLANSZA_Y 22
+
 
 // narysowanie napisu txt na powierzchni screen, zaczynaj¹c od punktu (x, y)
 // charset to bitmapa 128x128 zawieraj¹ca znaki
@@ -34,8 +37,11 @@ void DrawPixel(SDL_Surface *surface, int x, int y, Uint32 color);
 void DrawLine(SDL_Surface *screen, int x, int y, int l, int dx, int dy, Uint32 color);
 // rysowanie prostok¹ta o d³ugoœci boków l i k
 void DrawRectangle(SDL_Surface *screen, int x, int y, int l, int k, Uint32 outlineColor, Uint32 fillColor);
-void klocekT(char tablica[10][20],int pozycja[4][2], int x, int y, char znak);
-void klocekL(SDL_Surface *screen, int x, int y, int color);
-void czyszczenie(char tablica[10][20], int pozycja[4][2]);
-bool kolizja(char tablica[10][20], int pozycja[4][2], int x = 0, int y = 0);
+void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y, char znak, int *obrot);
+void klocekL(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
+void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
+void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak=' ');
+bool kolizja(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x = 0, int y = 0);
+void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int *pozycja_x, int x);
+void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y]);
 #endif

@@ -53,43 +53,507 @@ void DrawRectangle(SDL_Surface *screen, int x, int y, int l, int k,
 	for (i = y + 1; i < y + k - 1; i++)
 		DrawLine(screen, x + 1, i, l - 2, 1, 0, fillColor);
 };
-void klocekT(char tablica[10][20],int pozycja[4][2], int x, int y, char znak)
+void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y, char znak,int *obrot)
 {
-	tablica[x][y] = znak;
-	pozycja[0][0] = x;
-	pozycja[0][1] = y;
-	
-	tablica[x][y+1] = znak;
-	pozycja[1][0] = x;
-	pozycja[1][1] = y+1;
+	if(pozycja[0][0]!=0)
+		czyszczenie(tablica, pozycja);
 
-	tablica[x-1][y + 1] = znak;
-	pozycja[2][0] = x-1;
-	pozycja[2][1] = y + 1;
-
-	tablica[x + 1][y + 1] = znak;
-	pozycja[3][0] = x+1;
-	pozycja[3][1] = y + 1;
+	switch (*obrot)
+	{
+	case 0:
+		if (tablica[x + 1][y] != ' ' && tablica[x - 2][y] == ' ')
+		{
+			x--;
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		//else if (tablica[x + 1][y] != ' ' && tablica[x - 2][y] != ' ')
+			//klocekT(tablica, pozycja, x, y, znak, 3);
+		else
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		break;
+	case 1:
+		if (tablica[x][y + 1] != ' ' && tablica[x][y - 2] == ' ')
+		{
+			y--;
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		//else if (tablica[x][y+1] != ' ' && tablica[x][y-2] != ' ')
+			//klocekT(tablica, pozycja, x, y, znak, 0);
+		else
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		break;
+	case 2:
+		if (tablica[x-1][y] != ' ' && tablica[x+2][y] == ' ')
+		{
+			x++;
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		//else if (tablica[x-1][y] != ' ' && tablica[x+2][y] != ' ')
+		//	klocekT(tablica, pozycja, x, y, znak, 1);
+		else
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x + 1][y] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y;
+		}
+		break;
+	case 3:
+		if (tablica[x][y-1] != ' ' && tablica[x][y+2] == ' ')
+		{
+			y++;
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x][y - 1] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y - 1;
+		}
+		//else if (tablica[x][y-1] != ' ' && tablica[x][y+2] != ' ')
+		//	klocekT(tablica, pozycja, x, y, znak, 2);
+		else
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x][y - 1] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y - 1;
+		}
+		break;
+	}
 }
-void czyszczenie(char tablica[10][20], int pozycja[4][2])
+void klocekL(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 1][y - 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x - 1][y] = znak;
+			pozycja[1][0] = x - 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x + 1][y] = znak;
+			pozycja[2][0] = x + 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x + 1][y - 1] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y - 1;
+		}
+		else
+		{
+			*obrot = 3;
+			klocekL(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	case 1:
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y - 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y - 1;
+			//3
+			tablica[x][y + 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y + 1;
+			//4
+			tablica[x + 1][y + 1] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y + 1;
+		}
+		else
+		{
+			*obrot = 0;
+			klocekL(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	case 2:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x+1][y] = znak;
+		pozycja[1][0] = x+1;
+		pozycja[1][1] = y;
+		//3
+		tablica[x-1][y] = znak;
+		pozycja[2][0] = x-1;
+		pozycja[2][1] = y;
+		//4
+		tablica[x - 1][y + 1] = znak;
+		pozycja[3][0] = x - 1;
+		pozycja[3][1] = y + 1;
+		break;
+	case 3:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x][y + 1] = znak;
+		pozycja[1][0] = x;
+		pozycja[1][1] = y + 1;
+		//3
+		tablica[x][y-1] = znak;
+		pozycja[2][0] = x;
+		pozycja[2][1] = y-1;
+		//4
+		tablica[x - 1][y - 1] = znak;
+		pozycja[3][0] = x - 1;
+		pozycja[3][1] = y - 1;
+		break;
+	}
+}
+void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 1][y - 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x - 1][y - 1] = znak;
+			pozycja[3][0] = x - 1;
+			pozycja[3][1] = y - 1;
+		}
+		break;
+	case 1:
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y + 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y + 1;
+			//3
+			tablica[x][y - 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y - 1;
+			//4
+			tablica[x + 1][y - 1] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y - 1;
+		}
+		break;
+	case 2:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x + 1][y] = znak;
+		pozycja[1][0] = x + 1;
+		pozycja[1][1] = y;
+		//3
+		tablica[x - 1][y] = znak;
+		pozycja[2][0] = x - 1;
+		pozycja[2][1] = y;
+		//4
+		tablica[x + 1][y + 1] = znak;
+		pozycja[3][0] = x + 1;
+		pozycja[3][1] = y + 1;
+		break;
+	case 3:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x][y - 1] = znak;
+		pozycja[1][0] = x;
+		pozycja[1][1] = y - 1;
+		//3
+		tablica[x][y + 1] = znak;
+		pozycja[2][0] = x;
+		pozycja[2][1] = y + 1;
+		//4
+		tablica[x - 1][y + 1] = znak;
+		pozycja[3][0] = x - 1;
+		pozycja[3][1] = y + 1;
+		break;
+	}
+}
+void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	if (pozycja[0][0] != 0)
+		czyszczenie(tablica, pozycja);
+
+	switch (*obrot)
+	{
+	case 0:
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 1][y - 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			tablica[x - 1][y - 1] = znak;
+			pozycja[3][0] = x - 1;
+			pozycja[3][1] = y - 1;
+		}
+		break;
+	case 1:
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x + 1][y + 1] == ' ')
+		{
+			//1
+			tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			tablica[x][y + 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y + 1;
+			//3
+			tablica[x][y - 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y - 1;
+			//4
+			tablica[x + 1][y - 1] = znak;
+			pozycja[3][0] = x + 1;
+			pozycja[3][1] = y - 1;
+		}
+		break;
+	case 2:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x + 1][y] = znak;
+		pozycja[1][0] = x + 1;
+		pozycja[1][1] = y;
+		//3
+		tablica[x - 1][y] = znak;
+		pozycja[2][0] = x - 1;
+		pozycja[2][1] = y;
+		//4
+		tablica[x + 1][y + 1] = znak;
+		pozycja[3][0] = x + 1;
+		pozycja[3][1] = y + 1;
+		break;
+	case 3:
+		//1
+		tablica[x][y] = znak;
+		pozycja[0][0] = x;
+		pozycja[0][1] = y;
+		//2
+		tablica[x][y-1] = znak;
+		pozycja[1][0] = x;
+		pozycja[1][1] = y-1;
+		//3
+		tablica[x][y+1] = znak;
+		pozycja[2][0] = x;
+		pozycja[2][1] = y+1;
+		//4
+		tablica[x - 1][y + 1] = znak;
+		pozycja[3][0] = x - 1;
+		pozycja[3][1] = y + 1;
+		break;
+	}
+}
+void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak)
 {
 	for (int i = 0; i < 4; i++)
-		tablica[pozycja[i][0]][pozycja[i][1]] = ' ';
-}
-void klocekL(SDL_Surface *screen, int x, int y, int color)
-{
-	DrawRectangle(screen, x, y, WYMIAR, WYMIAR, color, color);
-	DrawRectangle(screen, x, y + WYMIAR, WYMIAR, WYMIAR, color, color);
-	DrawRectangle(screen, x, y + 2 * WYMIAR, WYMIAR, WYMIAR, color, color);
-	DrawRectangle(screen, x + WYMIAR, y + 2 * WYMIAR, WYMIAR, WYMIAR, color, color);
+		tablica[pozycja[i][0]][pozycja[i][1]] = znak;
 }
 
-bool kolizja(char tablica[10][20],int pozycja[4][2],int x, int y)
+bool kolizja(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2],int x, int y)
 {
+	char znak = tablica[pozycja[0][0]][pozycja[0][1]];
+	czyszczenie(tablica, pozycja);
 	for (int i = 0; i < 4; i++)
 	{
-		if((tablica[pozycja[i][0] + x][pozycja[i][1] + y] != ' ') &&)
+		if ((tablica[pozycja[i][0] + x][pozycja[i][1] + y] != ' '))
+		{
+			czyszczenie(tablica, pozycja, znak);
 			return true;
+		}
 	}
+	czyszczenie(tablica, pozycja, znak);
 	return false;
+}
+void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2],int *pozycja_x, int x)
+{
+	if (!kolizja(tablica, pozycja, x, 0))
+	{
+		czyszczenie(tablica, pozycja);
+		*pozycja_x += x;
+	}
+}
+void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y])
+{
+	int zapelnienie = 0;
+	for (int i = 1; i < PLANSZA_Y-1; i++)
+	{
+		for (int j = 1; j < PLANSZA_X-1 && tablica[j][i] != ' '; j++)
+			zapelnienie++;
+		if (zapelnienie == PLANSZA_X - 2)
+		{
+			for (int j = 1; j < PLANSZA_X - 1; j++)
+				tablica[j][i] = ' ';
+			for (int k = i; k > 1; k--)
+			{
+				for (int j = 1; j < PLANSZA_X - 1; j++)
+					tablica[j][k] = tablica[j][k - 1];
+			}
+				
+		}
+		zapelnienie = 0;
+
+	}
+
 }
