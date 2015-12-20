@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 	}
 	int rc;
 	int x, y;
+	double czas_gry=0;
 	bool quit = false;
 	SDL_Event event;
 	SDL_Surface *screen, *szary, *rozowy, *niebieski, *pomaranczowy, *blekit, *zolty, *zielony, *czerwony,
@@ -235,18 +236,28 @@ int main(int argc, char **argv)
 	double odliczanie = CZAS_ETAPU;
 	int punkty = 0;
 	int poprzednie=0;
+	bool koniec_gry = false;
+	int najlepsze_wyniki[ILOSC_WYNIKOW];
+	char imie[ILOSC_WYNIKOW][10];
+	FILE*plik;
+	plik = fopen("wyniki.txt", "r");
+	for (int i = 0; i < ILOSC_WYNIKOW; i++)
+	{
+		fscanf(plik, "%s %d", imie[i],&najlepsze_wyniki[i]);
+	}
 	while (!quit) {
 		t2 = SDL_GetTicks();
 		SDL_FillRect(screen, NULL, czarny);
 		delta = (t2 - t1) * 0.001;
 		t1 = t2;
 		czas -= delta;
+		odliczanie -= delta;
+		czas_gry += delta;
 		if (x != 0)
 		{
 			przesuniecie(tablica, pozycja, &pozycja_x, x);
 			x = 0;
 		}
-		odliczanie -= delta;
 		if (etap < ILOSC_ETAPOW && odliczanie <= 0)
 		{
 			etap++;
@@ -269,40 +280,49 @@ int main(int argc, char **argv)
 				pozycja[0][0] = 0;
 				pozycja_y = 2;
 				pozycja_x = 5;
+				if (tablica[pozycja_x][pozycja_y] != ' ')
+					koniec_gry = !koniec_gry;
 			}
 		}
-		switch (klocek)
+		if (!koniec_gry)
 		{
-		case 0:
-			klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
-			break;
-		case 1:
-			klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
-			break;
-		case 2:
-			klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
-			break;
-		case 3:
-			klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
-			break;
-		case 4:
-			klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
-			break;
-		case 5:
-			klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
-			break;
-		case 6:
-			klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-			break;
+			switch (klocek)
+			{
+			case 0:
+				klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
+				break;
+			case 1:
+				klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
+				break;
+			case 2:
+				klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
+				break;
+			case 3:
+				klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
+				break;
+			case 4:
+				klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
+				break;
+			case 5:
+				klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
+				break;
+			case 6:
+				klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
+				break;
+			}
 		}
 		// nastepny klocek
 		DrawSurface(screen, figury[next_klocek], 80 + PLANSZA_X*WYMIAR, 20 + 4*WYMIAR);
-		// punkty
+		// Informacje
 		char punkty_txt[25];
+		sprintf(punkty_txt, "Czas: %.1f", czas_gry);
+		DrawString(screen, 50 + PLANSZA_X*WYMIAR, 10 + 8 * WYMIAR, punkty_txt, charset);
 		sprintf(punkty_txt, "Etap: %d", etap+1);
-		DrawString(screen, 70 + PLANSZA_X*WYMIAR, 20 + 8 * WYMIAR, punkty_txt,charset);
+		DrawString(screen, 50 + PLANSZA_X*WYMIAR, 20 + 8 * WYMIAR, punkty_txt,charset);
 		sprintf(punkty_txt, "Punkty: %d", punkty);
-		DrawString(screen, 70 + PLANSZA_X*WYMIAR, 30 + 8 * WYMIAR, punkty_txt, charset);
+		DrawString(screen, 50 + PLANSZA_X*WYMIAR, 30 + 8 * WYMIAR, punkty_txt, charset);
+		sprintf(punkty_txt, "Kolejny etap za: %.1f", odliczanie);
+		DrawString(screen, 50 + PLANSZA_X*WYMIAR, 40 + 8 * WYMIAR, punkty_txt, charset);
 		x = 0; y = 0;
 		for (int i = 0; i < PLANSZA_X; i++)
 		{
@@ -329,7 +349,6 @@ int main(int argc, char **argv)
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
 		SDL_RenderCopy(renderer, scrtex, NULL, NULL);
 		SDL_RenderPresent(renderer);
-		
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_KEYDOWN:
@@ -343,18 +362,61 @@ int main(int argc, char **argv)
 					obrot++;
 					obrot %= 4;
 					break;
+				case SDLK_s:
+					if (etap < ILOSC_ETAPOW)
+					{
+						etap++;
+						odliczanie = CZAS_ETAPU;
+					}
+					break;
+				case SDLK_DOWN:
+					while(!kolizja(tablica, pozycja, 0, 1))
+					{
+						czyszczenie(tablica, pozycja);
+						pozycja_y += 1;
+						switch (klocek)
+						{
+						case 0:
+							klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
+							break;
+						case 1:
+							klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
+							break;
+						case 2:
+							klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
+							break;
+						case 3:
+							klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
+							break;
+						case 4:
+							klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
+							break;
+						case 5:
+							klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
+							break;
+						case 6:
+							klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
+							break;
+						}
+					}
+					break;
 				case SDLK_p:
 					bool pause = true;
 					while (pause)
 					{
-						while (SDL_PollEvent(&event)) {
-							switch (event.type) {
+						while (SDL_PollEvent(&event))
+						{
+							switch (event.type)
+							{
 							case SDL_KEYDOWN:
 								if (event.key.keysym.sym == SDLK_p)
 									pause = false;
+								break;
 							}
 						}
 					}
+					t1 = SDL_GetTicks();
+					break;
 				}
 				break;
 			case SDL_QUIT:
@@ -363,7 +425,7 @@ int main(int argc, char **argv)
 			};
 		};
 	}
-
+	fclose(plik);
 
 
 	//		DrawScreen(screen, plane, ship, charset, worldTime, delta, vertSpeed);

@@ -4,9 +4,10 @@
 #define _USE_MATH_DEFINES
 #include<math.h>
 #include<stdio.h>
-#include<string.h>
+#include<cstring>
 #include<stdlib.h>
 #include<ctime>
+#include<string>
 
 extern "C" {
 	//#ifdef BIT64
@@ -18,6 +19,8 @@ extern "C" {
 	//#endif
 }
 
+using namespace std;
+
 #define SCREEN_WIDTH	400
 #define SCREEN_HEIGHT	600
 #define CZAS_OPADANIA 0.2
@@ -27,7 +30,7 @@ extern "C" {
 #define PRZYSPIESZENIE 0.01
 #define ILOSC_ETAPOW 10
 #define CZAS_ETAPU 25
-
+#define ILOSC_WYNIKOW 1
 
 // narysowanie napisu txt na powierzchni screen, zaczynaj¹c od punktu (x, y)
 // charset to bitmapa 128x128 zawieraj¹ca znaki
