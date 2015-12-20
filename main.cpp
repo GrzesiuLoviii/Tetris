@@ -281,7 +281,10 @@ int main(int argc, char **argv)
 				pozycja_y = 2;
 				pozycja_x = 5;
 				if (tablica[pozycja_x][pozycja_y] != ' ')
+				{
 					koniec_gry = !koniec_gry;
+					quit = true;
+				}
 			}
 		}
 		if (!koniec_gry)

@@ -8,6 +8,7 @@
 #include<stdlib.h>
 #include<ctime>
 #include<string>
+#include<iostream>
 
 extern "C" {
 	//#ifdef BIT64
