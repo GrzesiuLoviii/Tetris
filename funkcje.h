@@ -8,7 +8,6 @@
 #include<stdlib.h>
 #include<ctime>
 #include<string>
-#include<iostream>
 
 extern "C" {
 	//#ifdef BIT64
@@ -25,7 +24,7 @@ using namespace std;
 #define SCREEN_WIDTH	400
 #define SCREEN_HEIGHT	600
 #define CZAS_OPADANIA 0.2
-#define WYMIAR 15
+#define WYMIAR 16
 #define PLANSZA_X 12
 #define PLANSZA_Y 22
 #define PRZYSPIESZENIE 0.01

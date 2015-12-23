@@ -1,35 +1,57 @@
-﻿Build started 20.12.2015 17:05:01.
+﻿Build started 23.12.2015 00:30:33.
      1>Project "C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\projekt2vs15.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I.\sdl\include\ /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
          main.cpp
      1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(5): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(243): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(245): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(246): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(248): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1193): note: see declaration of 'fscanf'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(318): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(320): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
      1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(322): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
      1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(324): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(354): warning C4477: 'sprintf' : format string '%s' requires an argument of type 'char *', but variadic argument 1 has type 'std::string'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(354): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(326): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
          c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
-     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(352): warning C4101: 'n': unreferenced local variable
+     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(328): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
+     1>c:\users\grieg\onedrive\dokumenty\github\tetris\main.cpp(356): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(1769): note: see declaration of 'sprintf'
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\projekt2vs15.exe" /INCREMENTAL /NOLOGO .\sdl\winlib15\sdl2.lib .\sdl\winlib15\sdl2main.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\projekt2vs15.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\projekt2vs15.lib" /MACHINE:X86 Debug\funkcje.obj
          Debug\main.obj
-     1>main.obj : error LNK2019: unresolved external symbol __imp___invalid_parameter referenced in function "char * __cdecl std::_Allocate<char>(unsigned int,char *,bool)" (??$_Allocate@D@std@@YAPADIPAD_N@Z)
-     1>main.obj : error LNK2019: unresolved external symbol __imp___CrtDbgReportW referenced in function "char * __cdecl std::_Allocate<char>(unsigned int,char *,bool)" (??$_Allocate@D@std@@YAPADIPAD_N@Z)
-     1>msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___free_dbg referenced in function "public: static void __cdecl std::_Fac_node::operator delete(void *)" (??3_Fac_node@std@@SAXPAX@Z)
-     1>msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___malloc_dbg referenced in function "public: static void * __cdecl std::_Fac_node::operator new(unsigned int)" (??2_Fac_node@std@@SAPAXI@Z)
-     1>C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\projekt2vs15.exe : fatal error LNK1120: 4 unresolved externals
-     1>Done Building Project "C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\projekt2vs15.vcxproj" (Build target(s)) -- FAILED.
+         projekt2vs15.vcxproj -> C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\projekt2vs15.exe
+       PostBuildEvent:
+         copy /y "C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\sdl\winlib15\*.dll" C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\"
+         copy /y "C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\*.bmp" C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\Debug\"
+         :VCEnd
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\sdl\winlib15\concrt140.dll
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\sdl\winlib15\SDL2.dll
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\sdl\winlib15\vccorlib140.dll
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\sdl\winlib15\vcruntime140.dll
+                 4 file(s) copied.
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\cs8x8.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\eti.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek1.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek2.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek3.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek4.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek5.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek6.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek7.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek8.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\klocek9.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\kwadrat.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\linia.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\literaJ.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\literaL.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\literaS.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\literaT.bmp
+         C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\literaZ.bmp
+                18 file(s) copied.
+     1>Done Building Project "C:\Users\grieg\OneDrive\Dokumenty\GitHub\Tetris\projekt2vs15.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:00.87
+Time Elapsed 00:00:00.97

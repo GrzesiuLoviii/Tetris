@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 		SDL_Quit();
 		return 1;
 	};
-	rozowy = SDL_LoadBMP("./klocek5.bmp");
+	rozowy = SDL_LoadBMP("./klocek9.bmp");
 	if (rozowy == NULL) {
 		printf("SDL_LoadBMP(klocek5.bmp) error: %s\n", SDL_GetError());
 		SDL_FreeSurface(screen);
@@ -239,6 +239,8 @@ int main(int argc, char **argv)
 	bool koniec_gry = false;
 	int najlepsze_wyniki[ILOSC_WYNIKOW];
 	char imie[ILOSC_WYNIKOW][10];
+	char wpisz[20] = { ' ' };
+	int litera = 0;
 	FILE*plik;
 	plik = fopen("wyniki.txt", "r");
 	for (int i = 0; i < ILOSC_WYNIKOW; i++)
@@ -246,49 +248,48 @@ int main(int argc, char **argv)
 		fscanf(plik, "%s %d", imie[i],&najlepsze_wyniki[i]);
 	}
 	while (!quit) {
-		t2 = SDL_GetTicks();
-		SDL_FillRect(screen, NULL, czarny);
-		delta = (t2 - t1) * 0.001;
-		t1 = t2;
-		czas -= delta;
-		odliczanie -= delta;
-		czas_gry += delta;
-		if (x != 0)
+		if(!koniec_gry)
 		{
-			przesuniecie(tablica, pozycja, &pozycja_x, x);
-			x = 0;
-		}
-		if (etap < ILOSC_ETAPOW && odliczanie <= 0)
-		{
-			etap++;
-			odliczanie = CZAS_ETAPU;
-		}
-		if (czas <= 0)
-		{
-			if (!kolizja(tablica, pozycja, 0, 1))
+			t2 = SDL_GetTicks();
+			SDL_FillRect(screen, NULL, czarny);
+			delta = (t2 - t1) * 0.001;
+			t1 = t2;
+			czas -= delta;
+			odliczanie -= delta;
+			czas_gry += delta;
+			if (x != 0)
 			{
-				czyszczenie(tablica, pozycja);
-				czas = CZAS_OPADANIA - etap*PRZYSPIESZENIE;
-				pozycja_y += 1;
+				przesuniecie(tablica, pozycja, &pozycja_x, x);
+				x = 0;
 			}
-			else
+			if (etap < ILOSC_ETAPOW && odliczanie <= 0)
 			{
-				sprawdz(tablica, &punkty, etap, &poprzednie);
-				obrot = 0;
-				klocek = next_klocek;
-				next_klocek = rand() % 7;
-				pozycja[0][0] = 0;
-				pozycja_y = 2;
-				pozycja_x = 5;
-				if (tablica[pozycja_x][pozycja_y] != ' ')
+				etap++;
+				odliczanie = CZAS_ETAPU;
+			}
+			if (czas <= 0)
+			{
+				if (!kolizja(tablica, pozycja, 0, 1))
 				{
-					koniec_gry = !koniec_gry;
-					quit = true;
+					czyszczenie(tablica, pozycja);
+					czas = CZAS_OPADANIA - etap*PRZYSPIESZENIE;
+					pozycja_y += 1;
+				}
+				else
+				{
+					sprawdz(tablica, &punkty, etap, &poprzednie);
+					obrot = 0;
+					klocek = next_klocek;
+					next_klocek = rand() % 7;
+					pozycja[0][0] = 0;
+					pozycja_y = 2;
+					pozycja_x = 5;
+					if (tablica[pozycja_x][pozycja_y] != ' ' || tablica[pozycja_x][pozycja_y+1] != ' ')
+					{
+						koniec_gry = !koniec_gry;
+					}
 				}
 			}
-		}
-		if (!koniec_gry)
-		{
 			switch (klocek)
 			{
 			case 0:
@@ -349,77 +350,97 @@ int main(int argc, char **argv)
 					DrawSurface(screen, zielony, 20 + i*WYMIAR, 20 + j*WYMIAR);
 			}
 		}
+		if (koniec_gry)
+		{
+			char text[100];
+			sprintf(text, "Przegrales podaj imie: %s", wpisz);
+			DrawString(screen, 30, 40 + PLANSZA_Y * WYMIAR, text, charset);
+		}
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
 		SDL_RenderCopy(renderer, scrtex, NULL, NULL);
 		SDL_RenderPresent(renderer);
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym)
+				if (!koniec_gry)
 				{
-				case SDLK_ESCAPE: quit = true; break;
-				case SDLK_LEFT: x--; break;
-				case SDLK_RIGHT: x++; break;
-				case SDLK_UP:
-				case SDLK_SPACE:
-					obrot++;
-					obrot %= 4;
-					break;
-				case SDLK_s:
-					if (etap < ILOSC_ETAPOW)
+					switch (event.key.keysym.sym)
 					{
-						etap++;
-						odliczanie = CZAS_ETAPU;
-					}
-					break;
-				case SDLK_DOWN:
-					while(!kolizja(tablica, pozycja, 0, 1))
-					{
-						czyszczenie(tablica, pozycja);
-						pozycja_y += 1;
-						switch (klocek)
+					case SDLK_ESCAPE: quit = true; break;
+					case SDLK_LEFT: x--; break;
+					case SDLK_RIGHT: x++; break;
+					case SDLK_UP:
+					case SDLK_SPACE:
+						obrot++;
+						obrot %= 4;
+						break;
+					case SDLK_s:
+						if (etap < ILOSC_ETAPOW)
 						{
-						case 0:
-							klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
-							break;
-						case 1:
-							klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
-							break;
-						case 2:
-							klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
-							break;
-						case 3:
-							klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
-							break;
-						case 4:
-							klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
-							break;
-						case 5:
-							klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
-							break;
-						case 6:
-							klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-							break;
+							etap++;
+							odliczanie = CZAS_ETAPU;
 						}
-					}
-					break;
-				case SDLK_p:
-					bool pause = true;
-					while (pause)
-					{
-						while (SDL_PollEvent(&event))
+						break;
+					case SDLK_DOWN:
+						while (!kolizja(tablica, pozycja, 0, 1))
 						{
-							switch (event.type)
+							czyszczenie(tablica, pozycja);
+							pozycja_y += 1;
+							switch (klocek)
 							{
-							case SDL_KEYDOWN:
-								if (event.key.keysym.sym == SDLK_p)
-									pause = false;
+							case 0:
+								klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
+								break;
+							case 1:
+								klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
+								break;
+							case 2:
+								klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
+								break;
+							case 3:
+								klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
+								break;
+							case 4:
+								klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
+								break;
+							case 5:
+								klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
+								break;
+							case 6:
+								klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
 								break;
 							}
 						}
+						break;
+					case SDLK_p:
+						bool pause = true;
+						while (pause)
+						{
+							while (SDL_PollEvent(&event))
+							{
+								switch (event.type)
+								{
+								case SDL_KEYDOWN:
+									if (event.key.keysym.sym == SDLK_p)
+										pause = false;
+									break;
+								}
+							}
+						}
+						t1 = SDL_GetTicks();
+						break;
 					}
-					t1 = SDL_GetTicks();
-					break;
+				}
+				else
+				{
+					char w = event.key.keysym.sym;
+					if (w != SDLK_RETURN)
+					{
+						if (litera == 0)
+							w = w - 32;
+						wpisz[litera] = w;
+						litera++;
+					}
 				}
 				break;
 			case SDL_QUIT:
