@@ -1,0 +1,27 @@
+ssssssssssssssssssssss
+s                  bbs
+s                  bbs
+s                   rs
+s        r         ccs
+s       rr          cs
+s        r           s
+s                  zzs
+s                  zzs
+s                  zzs
+s                  zzs
+ssssssssssssssssssssss
+pozycjaX:5
+pozycjaY:9k1:5,9
+k2:5,8
+k4:4,9
+k3:6,9
+Punkty:200
+Etap:1
+Poprzednie:0
+Obrot:0
+Czasgry:27.809985
+Czas:0.069000
+Odliczanie:22.190000
+Klocek:5
+Nastepny:6
+Zapis:3

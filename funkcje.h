@@ -7,7 +7,6 @@
 #include<cstring>
 #include<stdlib.h>
 #include<ctime>
-#include<string>
 
 extern "C" {
 	//#ifdef BIT64
@@ -24,13 +23,14 @@ using namespace std;
 #define SCREEN_WIDTH	400
 #define SCREEN_HEIGHT	600
 #define CZAS_OPADANIA 0.2
-#define WYMIAR 16
+#define WYMIAR 15
 #define PLANSZA_X 12
 #define PLANSZA_Y 22
 #define PRZYSPIESZENIE 0.01
 #define ILOSC_ETAPOW 10
 #define CZAS_ETAPU 25
 #define ILOSC_WYNIKOW 5
+#define PLYNNE 0.0133333
 
 // narysowanie napisu txt na powierzchni screen, zaczynaj¹c od punktu (x, y)
 // charset to bitmapa 128x128 zawieraj¹ca znaki
@@ -49,6 +49,7 @@ void klocekT(char tablica[PLANSZA_X][PLANSZA_Y],int pozycja[4][2], int x, int y,
 void klocekL(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekJ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekI(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
+void klocekI2(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekO(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekS(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
 void klocekZ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot);
@@ -58,4 +59,6 @@ void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int *po
 void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int etap, int *poprzednie);
 void klocki(int klocek, char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int pozycja_x, int pozycja_y, int *obrot);
 void nowa_gra(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek);
+void zapisz_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek, int pozycje[4][2], int * pozycja_x, int* pozycja_y,int *zapisz);
+void wczytaj_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek, int pozycje[4][2], int * pozycja_x, int* pozycja_y, int *zapisz);
 #endif

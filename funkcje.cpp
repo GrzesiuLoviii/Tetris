@@ -602,7 +602,66 @@ void klocekZ(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y
 		break;
 	}
 }
-
+void klocekI2(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x, int y, char znak, int *obrot)
+{
+	switch (*obrot)
+	{
+	case 0:
+	case 2:
+		if (tablica[x - 1][y] == ' ' && tablica[x + 1][y] == ' ' && tablica[x + 2][y] == ' ')
+		{
+			//1
+			//tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			//tablica[x + 1][y] = znak;
+			pozycja[1][0] = x + 1;
+			pozycja[1][1] = y;
+			//3
+			//tablica[x - 1][y] = znak;
+			pozycja[2][0] = x - 1;
+			pozycja[2][1] = y;
+			//4
+			//tablica[x + 2][y] = znak;
+			pozycja[3][0] = x + 2;
+			pozycja[3][1] = y;
+		}
+		else
+		{
+			*obrot = 3;
+			klocekI(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	case 1:
+	case 3:
+		if (tablica[x][y - 1] == ' ' && tablica[x][y + 1] == ' ' && tablica[x][y + 2] == ' ')
+		{
+			//1
+			//tablica[x][y] = znak;
+			pozycja[0][0] = x;
+			pozycja[0][1] = y;
+			//2
+			//tablica[x][y + 1] = znak;
+			pozycja[1][0] = x;
+			pozycja[1][1] = y + 1;
+			//3
+			//tablica[x][y - 1] = znak;
+			pozycja[2][0] = x;
+			pozycja[2][1] = y - 1;
+			//4
+			//tablica[x][y + 2] = znak;
+			pozycja[3][0] = x;
+			pozycja[3][1] = y + 2;
+		}
+		else
+		{
+			*obrot = 0;
+			klocekI(tablica, pozycja, x, y, znak, obrot);
+		}
+		break;
+	}
+}
 void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char znak)
 {
 	for (int i = 0; i < 4; i++)
@@ -724,18 +783,48 @@ void nowa_gra(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *p
 	*next_klocek = rand() % 7;
 	*t1 = *t2 = SDL_GetTicks();
 }
-void zapisz_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek)
+void zapisz_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek, int pozycje[4][2], int * pozycja_x, int* pozycja_y, int *zapisz)
+{
+	(*zapisz)++;
+	FILE *plik_z;
+	plik_z = fopen("zapisz.txt", "w");
+	for (int i = 0; i < PLANSZA_X; i++)
+	{
+		for (int j = 0; j < PLANSZA_Y; j++)
+		{
+			fputc(tablica[i][j],plik_z);
+		}
+		fputc('\n', plik_z);
+	}
+	fprintf(plik_z, "pozycjaX:%d\npozycjaY:%d", *pozycja_x, *pozycja_y);
+	fprintf(plik_z, "k1:%d,%d\nk2:%d,%d\nk4:%d,%d\nk3:%d,%d\n", pozycje[0][0], pozycje[0][1], pozycje[1][0], pozycje[1][1], pozycje[2][0], pozycje[2][1], pozycje[3][0], pozycje[3][1]);
+	fprintf(plik_z, "Punkty:%d\nEtap:%d\nPoprzednie:%d\nObrot:%d\nCzasgry:%f\n", *punkty, *etap, *poprzednie, *obrot, *czas_gry);
+	fprintf(plik_z, "Czas:%f\n",*czas);
+	fprintf(plik_z, "Odliczanie:%f\n", *odliczanie);
+	fprintf(plik_z, "Klocek:%d\n", *klocek);
+	fprintf(plik_z, "Nastepny:%d\n", *next_klocek);
+	fprintf(plik_z, "Zapis:%d\n", *zapisz);
+	fclose(plik_z);
+}
+void wczytaj_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek,int pozycje[4][2],int * pozycja_x, int* pozycja_y, int *zapisz)
 {
 	FILE *plik_z;
-	*plik_z = fopen("zapisz.txt", 'w');
-	for (int j = 0; j < PLANSZA_Y; j++)
+	plik_z = fopen("zapisz.txt", "r");
+	for (int i = 0; i < PLANSZA_X; i++)
 	{
-		fprintf
+		for (int j = 0; j < PLANSZA_Y; j++)
+		{
+			tablica[i][j]=fgetc(plik_z);
+		}
+		fgetc(plik_z);
 	}
-	*punkty = *etap = *poprzednie = *obrot = *czas_gry = 0;
-	*czas = CZAS_OPADANIA;
-	*odliczanie = CZAS_ETAPU;
-	*klocek = rand() % 7;
-	*next_klocek = rand() % 7;
-	*t1 = *t2 = SDL_GetTicks();
+	fscanf(plik_z, "pozycjaX:%d\npozycjaY:%d", pozycja_x, pozycja_y);
+	fscanf(plik_z, "k1:%d,%d\nk2:%d,%d\nk4:%d,%d\nk3:%d,%d\n", &pozycje[0][0], &pozycje[0][1], &pozycje[1][0], &pozycje[1][1], &pozycje[2][0], &pozycje[2][1], &pozycje[3][0], &pozycje[3][1]);
+	fscanf(plik_z, "Punkty:%d\nEtap:%d\nPoprzednie:%d\nObrot:%d\nCzasgry:%f\n", punkty, etap, poprzednie, obrot, czas_gry);
+	fscanf(plik_z, "Czas:%f\n", czas);
+	fscanf(plik_z, "Odliczanie:%f\n", odliczanie);
+	fscanf(plik_z, "Klocek:%d\n", klocek);
+	fscanf(plik_z, "Nastepny:%d\n", next_klocek);
+	fscanf(plik_z, "Zapis:%d\n", zapisz);
+	fclose(plik_z);
 }

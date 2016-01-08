@@ -234,14 +234,18 @@ int main(int argc, char **argv)
 	int etap = 0;
 	double odliczanie = CZAS_ETAPU;
 	bool wpisywanie = false;
+	int zapis = 0;
 	int punkty = 0;
 	int poprzednie=0;
 	bool koniec_gry = false;
+	bool plynne = true;
 	char tryb='g';
 	int najlepsze_wyniki[ILOSC_WYNIKOW];
 	int miejsce = ILOSC_WYNIKOW;
 	double czas_komunikatu = 3.0;
 	char imie[ILOSC_WYNIKOW][10];
+	int wysokosc = 0;
+	int szerokosc = 0;
 	char wpisz[20] = { ' ' };
 	int litera = 0;
 	FILE*plik_w;
@@ -260,48 +264,81 @@ int main(int argc, char **argv)
 		SDL_FillRect(screen, NULL, czarny);
 		if(tryb=='g')
 		{
-			t2 = SDL_GetTicks();
-			delta = (t2 - t1) * 0.001;
-			t1 = t2;
-			czas -= delta;
-			odliczanie -= delta;
-			czas_gry += delta;
-			if (x != 0)
+			if (plynne == false)
 			{
-				przesuniecie(tablica, pozycja, &pozycja_x, x);
-				x = 0;
-			}
-			if (etap < ILOSC_ETAPOW && odliczanie <= 0)
-			{
-				etap++;
-				odliczanie = CZAS_ETAPU;
-			}
-			if (czas <= 0)
-			{
-				if (!kolizja(tablica, pozycja, 0, 1))
+				t2 = SDL_GetTicks();
+				delta = (t2 - t1) * 0.001;
+				t1 = t2;
+				czas -= delta;
+				odliczanie -= delta;
+				czas_gry += delta;
+				if (x != 0)
 				{
-					czyszczenie(tablica, pozycja);
-					czas = CZAS_OPADANIA - etap*PRZYSPIESZENIE;
-					pozycja_y += 1;
+					przesuniecie(tablica, pozycja, &pozycja_x, x);
+					x = 0;
 				}
-				else
+				if (etap < ILOSC_ETAPOW && odliczanie <= 0)
 				{
-					sprawdz(tablica, &punkty, etap, &poprzednie);
-					obrot = 0;
-					klocek = next_klocek;
-					next_klocek = rand() % 7;
-					pozycja[0][0] = 0;
-					pozycja_y = 2;
-					pozycja_x = 5;
-					if (tablica[pozycja_x][pozycja_y] != ' ' || tablica[pozycja_x][pozycja_y+1] != ' ')
+					etap++;
+					odliczanie = CZAS_ETAPU;
+				}
+				if (czas <= 0)
+				{
+					if (!kolizja(tablica, pozycja, 0, 1))
 					{
-						tryb = 'k';
+						czyszczenie(tablica, pozycja);
+						czas = CZAS_OPADANIA - etap*PRZYSPIESZENIE;
+						pozycja_y += 1;
+					}
+					else
+					{
+						sprawdz(tablica, &punkty, etap, &poprzednie);
+						obrot = 0;
+						klocek = next_klocek;
+						next_klocek = rand() % 7;
+						pozycja[0][0] = 0;
+						pozycja_y = 2;
+						pozycja_x = 5;
+						if (tablica[pozycja_x][pozycja_y] != ' ' || tablica[pozycja_x][pozycja_y + 1] != ' ')
+						{
+							tryb = 'k';
+						}
 					}
 				}
+				if (tryb == 'g')
+				{
+					klocki(klocek, tablica, pozycja, pozycja_x, pozycja_y, &obrot);
+				}
 			}
-			if (tryb == 'g') 
+			else
 			{
-				klocki(klocek, tablica, pozycja, pozycja_x, pozycja_y, &obrot);
+				t2 = SDL_GetTicks();
+				delta = (t2 - t1) * 0.001;
+				t1 = t2;
+				czas -= delta;
+				if (czas <= 0)
+				{
+					if (wysokosc < WYMIAR)
+						wysokosc += 1;
+					else if (wysokosc == WYMIAR)
+					{
+						pozycja_y += 1;
+						wysokosc = 0;
+						if (!kolizja(tablica, pozycja, 0, 1))
+						{
+							klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
+
+						}
+						else
+						{
+
+							pozycja_y = 2;
+						}
+					}
+					czas = PLYNNE;
+				}
+
+				DrawSurface(screen, figury[0], 20 + pozycja_x*WYMIAR, 20 + pozycja_y* WYMIAR+wysokosc);
 			}
 		}
 		// nastepny klocek
@@ -411,6 +448,13 @@ int main(int argc, char **argv)
 							pozycja_y = 2;
 							pozycja_x = 5;
 							break;
+					case SDLK_w:
+						if(zapis<3)
+							zapisz_gre(tablica, &punkty, &etap, &poprzednie, &czas, &odliczanie, &czas_gry, &t2, &t1, &klocek, &obrot, &next_klocek, pozycja, &pozycja_x, &pozycja_y, &zapis);
+						break;
+					case SDLK_l:
+						wczytaj_gre(tablica, &punkty, &etap, &poprzednie, &czas, &odliczanie, &czas_gry, &t2, &t1, &klocek, &obrot, &next_klocek, pozycja, &pozycja_x, &pozycja_y, &zapis);
+						break;
 					case SDLK_p:
 						bool pause = true;
 						while (pause)
