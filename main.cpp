@@ -14,7 +14,6 @@ int main(int argc, char **argv)
 				tablica[i][j] = 's';
 			else
 				tablica[i][j] = ' ';
-
 		}
 	}
 	int rc;
@@ -74,7 +73,7 @@ int main(int argc, char **argv)
 		SDL_Quit();
 		return 1;
 	};
-	rozowy = SDL_LoadBMP("./klocek9.bmp");
+	rozowy = SDL_LoadBMP("./klocek5.bmp");
 	if (rozowy == NULL) {
 		printf("SDL_LoadBMP(klocek5.bmp) error: %s\n", SDL_GetError());
 		SDL_FreeSurface(screen);
@@ -234,24 +233,34 @@ int main(int argc, char **argv)
 	int next_klocek = rand() % 7;
 	int etap = 0;
 	double odliczanie = CZAS_ETAPU;
+	bool wpisywanie = false;
 	int punkty = 0;
 	int poprzednie=0;
 	bool koniec_gry = false;
+	char tryb='g';
 	int najlepsze_wyniki[ILOSC_WYNIKOW];
+	int miejsce = ILOSC_WYNIKOW;
+	double czas_komunikatu = 3.0;
 	char imie[ILOSC_WYNIKOW][10];
 	char wpisz[20] = { ' ' };
 	int litera = 0;
-	FILE*plik;
-	plik = fopen("wyniki.txt", "r");
+	FILE*plik_w;
+	plik_w = fopen("wyniki.txt", "r");
 	for (int i = 0; i < ILOSC_WYNIKOW; i++)
 	{
-		fscanf(plik, "%s %d", imie[i],&najlepsze_wyniki[i]);
+		fscanf(plik_w, "%s %d", imie[i], &najlepsze_wyniki[i]);
+		if (najlepsze_wyniki[i] < 0)
+		{
+			for (int j = 0; j < 10;j++)
+				imie[i][j]=' ';
+			najlepsze_wyniki[i] = 0;
+		}
 	}
 	while (!quit) {
-		if(!koniec_gry)
+		SDL_FillRect(screen, NULL, czarny);
+		if(tryb=='g')
 		{
 			t2 = SDL_GetTicks();
-			SDL_FillRect(screen, NULL, czarny);
 			delta = (t2 - t1) * 0.001;
 			t1 = t2;
 			czas -= delta;
@@ -286,33 +295,13 @@ int main(int argc, char **argv)
 					pozycja_x = 5;
 					if (tablica[pozycja_x][pozycja_y] != ' ' || tablica[pozycja_x][pozycja_y+1] != ' ')
 					{
-						koniec_gry = !koniec_gry;
+						tryb = 'k';
 					}
 				}
 			}
-			switch (klocek)
+			if (tryb == 'g') 
 			{
-			case 0:
-				klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
-				break;
-			case 1:
-				klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
-				break;
-			case 2:
-				klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
-				break;
-			case 3:
-				klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
-				break;
-			case 4:
-				klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
-				break;
-			case 5:
-				klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
-				break;
-			case 6:
-				klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-				break;
+				klocki(klocek, tablica, pozycja, pozycja_x, pozycja_y, &obrot);
 			}
 		}
 		// nastepny klocek
@@ -333,10 +322,10 @@ int main(int argc, char **argv)
 			for (int j = 0; j < PLANSZA_Y; j++)
 			{
 				if (tablica[i][j] == 's')
-					DrawSurface(screen, szary, 20+i*WYMIAR, 20+j*WYMIAR);
-				else if(tablica[i][j]=='r')
+					DrawSurface(screen, szary, 20 + i*WYMIAR, 20 + j*WYMIAR);
+				else if (tablica[i][j] == 'r')
 					DrawSurface(screen, rozowy, 20 + i*WYMIAR, 20 + j*WYMIAR);
-				else if(tablica[i][j]=='n')
+				else if (tablica[i][j] == 'n')
 					DrawSurface(screen, niebieski, 20 + i*WYMIAR, 20 + j*WYMIAR);
 				else if (tablica[i][j] == 'p')
 					DrawSurface(screen, pomaranczowy, 20 + i*WYMIAR, 20 + j*WYMIAR);
@@ -350,11 +339,38 @@ int main(int argc, char **argv)
 					DrawSurface(screen, zielony, 20 + i*WYMIAR, 20 + j*WYMIAR);
 			}
 		}
-		if (koniec_gry)
+		if (tryb == 'k')
 		{
 			char text[100];
 			sprintf(text, "Przegrales podaj imie: %s", wpisz);
 			DrawString(screen, 30, 40 + PLANSZA_Y * WYMIAR, text, charset);
+		}
+		else if (tryb == 'w')
+		{
+			char text[100];
+			sprintf(text, "Jezeli chcesz zagrac ponownie wciœnij 'n'");
+			DrawString(screen, 30, 30 + PLANSZA_Y * WYMIAR, text, charset);
+			sprintf(text, "Dowolny inny klawisz wyjdzie z Gry");
+			DrawString(screen, 30, 40 + PLANSZA_Y * WYMIAR, text, charset);
+			sprintf(text, "Ranking");
+			DrawString(screen, 30, 50 + PLANSZA_Y * WYMIAR, text, charset);
+			for (int i = 0; i < ILOSC_WYNIKOW; i++)
+			{
+				sprintf(text, "%d. %s %d", i + 1, imie[i], najlepsze_wyniki[i]);
+				DrawString(screen, 30, i * 10 + 60 + PLANSZA_Y * WYMIAR, text, charset);
+			}
+		}
+		if (punkty > najlepsze_wyniki[miejsce - 1])
+		{
+			czas_komunikatu = 3.0;
+			miejsce--;
+		}
+		if(czas_komunikatu > 0)
+		{
+			czas_komunikatu -= delta;
+			char text[100];
+			sprintf(text, "Zajmujesz %d miejsce. Wyprzedziles gracza %s", miejsce, imie[miejsce]);
+			DrawString(screen, 30, 100, text, charset);
 		}
 		SDL_UpdateTexture(scrtex, NULL, screen->pixels, screen->pitch);
 		SDL_RenderCopy(renderer, scrtex, NULL, NULL);
@@ -362,7 +378,7 @@ int main(int argc, char **argv)
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_KEYDOWN:
-				if (!koniec_gry)
+				if (tryb == 'g')
 				{
 					switch (event.key.keysym.sym)
 					{
@@ -386,32 +402,15 @@ int main(int argc, char **argv)
 						{
 							czyszczenie(tablica, pozycja);
 							pozycja_y += 1;
-							switch (klocek)
-							{
-							case 0:
-								klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', &obrot);
-								break;
-							case 1:
-								klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', &obrot);
-								break;
-							case 2:
-								klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', &obrot);
-								break;
-							case 3:
-								klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', &obrot);
-								break;
-							case 4:
-								klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', &obrot);
-								break;
-							case 5:
-								klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', &obrot);
-								break;
-							case 6:
-								klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', &obrot);
-								break;
-							}
+							klocki(klocek, tablica, pozycja, pozycja_x,pozycja_y, &obrot);
 						}
 						break;
+					case SDLK_n:
+							nowa_gra(tablica, &punkty, &etap, &poprzednie, &czas, &odliczanie, &czas_gry, &t2, &t1, &klocek, &obrot, &next_klocek);
+							pozycja[0][0] = 0;
+							pozycja_y = 2;
+							pozycja_x = 5;
+							break;
 					case SDLK_p:
 						bool pause = true;
 						while (pause)
@@ -431,15 +430,58 @@ int main(int argc, char **argv)
 						break;
 					}
 				}
-				else
+				else if(tryb=='k')
 				{
 					char w = event.key.keysym.sym;
-					if (w != SDLK_RETURN)
+					if (w != SDLK_RETURN && tryb == 'k')
 					{
 						if (litera == 0)
 							w = w - 32;
 						wpisz[litera] = w;
 						litera++;
+					}
+					else
+					{
+						tryb = 'w';
+						litera = 0;
+						int i;
+						for ( i= ILOSC_WYNIKOW - 1;i>=0 && najlepsze_wyniki[i]<punkty;i--)
+						{
+							int x = najlepsze_wyniki[i];
+							char y[10];
+							for (int h = 0; h < 10; h++)
+								y[h] = imie[i][h];
+							for (int h = 0; h < 10; h++)
+								imie[i][h] = wpisz[h];
+							najlepsze_wyniki[i] = punkty;
+							if (i < ILOSC_WYNIKOW - 1)
+							{
+								najlepsze_wyniki[i + 1] = x;
+								for (int h = 0; h < 10; h++)
+									imie[i + 1][h] = y[h];
+							}
+						}
+						FILE *plik_z;
+						plik_z=fopen("wyniki.txt", "w+");
+						for (int i = 0; i < ILOSC_WYNIKOW; i++)
+						{
+							fprintf(plik_z, "%s %d\n", imie[i], najlepsze_wyniki[i]);
+						}
+						fclose(plik_z);
+						for (int h = 0; h < 10; h++)
+							wpisz[h] = ' ';
+
+					}
+				}
+				else if (tryb == 'w')
+				{
+					if (event.key.keysym.sym == SDLK_n)
+					{
+						nowa_gra(tablica, &punkty, &etap, &poprzednie, &czas, &odliczanie, &czas_gry, &t2, &t1, &klocek, &obrot, &next_klocek);
+						pozycja[0][0] = 0;
+						pozycja_y = 2;
+						pozycja_x = 5;
+						tryb = 'g';
 					}
 				}
 				break;
@@ -449,7 +491,7 @@ int main(int argc, char **argv)
 			};
 		};
 	}
-	fclose(plik);
+	fclose(plik_w);
 
 
 	//		DrawScreen(screen, plane, ship, charset, worldTime, delta, vertSpeed);

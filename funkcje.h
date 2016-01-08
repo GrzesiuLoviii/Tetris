@@ -30,7 +30,7 @@ using namespace std;
 #define PRZYSPIESZENIE 0.01
 #define ILOSC_ETAPOW 10
 #define CZAS_ETAPU 25
-#define ILOSC_WYNIKOW 1
+#define ILOSC_WYNIKOW 5
 
 // narysowanie napisu txt na powierzchni screen, zaczynaj¹c od punktu (x, y)
 // charset to bitmapa 128x128 zawieraj¹ca znaki
@@ -56,4 +56,6 @@ void czyszczenie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], char zna
 bool kolizja(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int x = 0, int y = 0);
 void przesuniecie(char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int *pozycja_x, int x);
 void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int etap, int *poprzednie);
+void klocki(int klocek, char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int pozycja_x, int pozycja_y, int *obrot);
+void nowa_gra(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek);
 #endif

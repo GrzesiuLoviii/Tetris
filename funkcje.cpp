@@ -676,3 +676,66 @@ void sprawdz(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int etap, int *pop
 	}
 	*poprzednie = zbicie;
 }
+void klocki(int klocek, char tablica[PLANSZA_X][PLANSZA_Y], int pozycja[4][2], int pozycja_x, int pozycja_y, int *obrot)
+{
+	switch (klocek)
+	{
+	case 0:
+		klocekI(tablica, pozycja, pozycja_x, pozycja_y, 'b', obrot);
+		break;
+	case 1:
+		klocekZ(tablica, pozycja, pozycja_x, pozycja_y, 'g', obrot);
+		break;
+	case 2:
+		klocekS(tablica, pozycja, pozycja_x, pozycja_y, 'c', obrot);
+		break;
+	case 3:
+		klocekL(tablica, pozycja, pozycja_x, pozycja_y, 'n', obrot);
+		break;
+	case 4:
+		klocekJ(tablica, pozycja, pozycja_x, pozycja_y, 'p', obrot);
+		break;
+	case 5:
+		klocekT(tablica, pozycja, pozycja_x, pozycja_y, 'r', obrot);
+		break;
+	case 6:
+		klocekO(tablica, pozycja, pozycja_x, pozycja_y, 'z', obrot);
+		break;
+	}
+}
+void nowa_gra(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie,double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1,int *klocek, int *obrot,int *next_klocek)
+{
+	for (int i = 0; i < PLANSZA_X; i++)
+	{
+		for (int j = 0; j < PLANSZA_Y; j++)
+		{
+			if (i == 0 || i == PLANSZA_X - 1)
+				tablica[i][j] = 's';
+			else if (j == 0 || j == PLANSZA_Y - 1)
+				tablica[i][j] = 's';
+			else
+				tablica[i][j] = ' ';
+		}
+	}
+	*punkty = *etap = *poprzednie =*obrot = *czas_gry = 0;
+	*czas = CZAS_OPADANIA;
+	*odliczanie = CZAS_ETAPU;
+	*klocek = rand() % 7;
+	*next_klocek = rand() % 7;
+	*t1 = *t2 = SDL_GetTicks();
+}
+void zapisz_gre(char tablica[PLANSZA_X][PLANSZA_Y], int *punkty, int *etap, int *poprzednie, double *czas, double *odliczanie, double *czas_gry, int *t2, int *t1, int *klocek, int *obrot, int *next_klocek)
+{
+	FILE *plik_z;
+	*plik_z = fopen("zapisz.txt", 'w');
+	for (int j = 0; j < PLANSZA_Y; j++)
+	{
+		fprintf
+	}
+	*punkty = *etap = *poprzednie = *obrot = *czas_gry = 0;
+	*czas = CZAS_OPADANIA;
+	*odliczanie = CZAS_ETAPU;
+	*klocek = rand() % 7;
+	*next_klocek = rand() % 7;
+	*t1 = *t2 = SDL_GetTicks();
+}
